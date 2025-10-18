@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useTemplateRef } from 'vue';
 import CGrowingTextArea from './components/CGrowingTextArea.vue';
 import ChevronBackwardIcon from './components/icons/ChevronBackwardIcon.vue';
 import type { Note } from './Note';
@@ -7,7 +8,35 @@ interface Props {
   note: Note
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
+
+const emit = defineEmits<{
+  (e: 'change', note: Note): void
+}>();
+
+const contentTextRef = useTemplateRef("content");
+
+function onContentChange(content: string) {
+  emit('change', { 
+    id: props.note.id, 
+    title: props.note.title, 
+    content: content
+  });
+}
+
+function onTitleChange(ev: Event) {
+  emit('change', {
+    id: props.note.id,
+    title: (ev.target!! as HTMLInputElement).value,
+    content: props.note.content
+  });
+}
+
+function onTitleKeypress(ev: KeyboardEvent) {
+  if (ev.key === 'Enter') {
+    contentTextRef.value?.focus();
+  }
+}
 
 </script>
 
@@ -20,8 +49,19 @@ defineProps<Props>();
     </div>
   </div>
 
-  <input class="input-title" placeholder="Заголовок..." :value="note.title">
-  <CGrowingTextArea class="textarea" placeholder="Введите текст..." :value="note.content" />
+  <input 
+    class="input-title" 
+    placeholder="Заголовок..." 
+    :value="note.title" 
+    @input="onTitleChange"
+    @keypress="onTitleKeypress">
+
+  <CGrowingTextArea 
+    class="textarea"
+    placeholder="Введите текст..."
+    ref="content"
+    :value="note.content"
+    @input="onContentChange" />
 </div>
 </template>
 
@@ -68,8 +108,9 @@ defineProps<Props>();
   padding: 0;
   margin: 0;
   outline: 0;
-  font-size: 1.7em;
+  font-size: 1.5em;
   line-height: 1.5;
+  font-weight: 500;
 }
 
 .textarea {
