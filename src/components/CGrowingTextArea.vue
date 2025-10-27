@@ -51,7 +51,11 @@ textarea {
   overflow: hidden;
   padding: 0;
   border: none;
+  background: none;
   outline: none;
+  color: currentColor;
+
+  font: var(--font-p);
 }
 
 .grow-wrap::after,
@@ -60,5 +64,9 @@ textarea {
 
   font: inherit;
   line-height: inherit;
+}
+
+textarea::placeholder {
+  color: var(--color-base30); /* todo: extract somewhere? */
 }
 </style>

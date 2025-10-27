@@ -4,10 +4,14 @@ import type { Note } from '@/Note';
 defineProps<{
   note: Note
 }>();
+
+defineEmits<{
+  click: [note: Note]
+}>();
 </script>
 
 <template>
-<div class="note yellow">
+<div class="note grey" @click="$emit('click', note)">
   <header class="title">{{ note.title }}</header>
   <p class="content">{{ note.content }}</p>
 </div>
@@ -15,36 +19,26 @@ defineProps<{
 
 <style scoped>
 .note {
-  padding: 16px;
-  border: 1px solid black;
-  border-radius: 12px;
+  padding: 32px;
+  border-radius: 32px;
   transition-duration: var(--transition-s);
   cursor: pointer;
 }
 
+.title {
+  font: var(--font-h4);
+  padding-bottom: 0.6rem;
+}
+
 .content {
-  line-height: 1.2;
+  margin: 0;
   max-height: 6em;
   text-overflow: ellipsis; /* todo */
   overflow: hidden;
+  color: var(--color-text-variant);
 }
 
-p {
-  margin: 0;
-}
-
-.title {
-  font-size: 18px;
-  font-weight: 500;
-  padding-bottom: 8px;
-}
-
-.note.yellow {
-  background-color: rgb(255, 249, 232);
-  border-color: rgb(255, 211, 161);
-}
-
-.note.yellow:hover {
-  background-color: rgb(255, 243, 211);
+.note.grey {
+  background-color: var(--color-gray05);
 }
 </style>

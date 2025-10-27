@@ -1,31 +1,31 @@
 :root {
+  --app-max-width: 1600px;
+
+  --color-base100: #F7F7F7;
+  --color-base70: #B3B3B3;
+  --color-base30: #575757;
+  --color-base10: #2B2B2B;
+  --color-base07: #222222;
+  --color-base05: #1F1F1F;
+  --color-base03: #1A1A1A;
+  --color-base00: #121212;
+
   --transition-s: 200ms;
-
-  --app-max-width: 900px;
   
-  --color-text-secondary: #777777;
-  --color-text-secondary-hover: #49a909;
+  --font-base: Inter, sans-serif;
 
-  --color-hover: #efefef;
-  --color-pressed: #e5e5e5;
-
-  --color-control-bg: #f7f7f7;
+  --font-h3: 600 1.25rem / 1.5em var(--font-base);
+  --font-h4: 600 1rem / 1.5em var(--font-base);
+  --font-body: 1rem / 1.5em var(--font-base);
+  --font-body2: 0.875rem / 1.25em var(--font-base);
 }
 
 body {
   max-width: var(--app-max-width);
-  min-height: 100dvh;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 0 auto;
-}
+  padding: 0 48px;
 
-#app {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  color: var(--color-base100);
+  background-color: var(--color-base00);
 
-  width: 100%;
+  font: var(--font-body);
 }
