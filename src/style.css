@@ -16,13 +16,13 @@
 
   --font-h3: 600 1.25rem / 1.5em var(--font-base);
   --font-h4: 600 1rem / 1.5em var(--font-base);
+  --font-h5: 600 0.875rem / 1.25em var(--font-base);
   --font-body: 1rem / 1.5em var(--font-base);
   --font-body2: 0.875rem / 1.25em var(--font-base);
 }
 
 body {
   max-width: var(--app-max-width);
-  padding: 0 48px;
 
   color: var(--color-base100);
   background-color: var(--color-base00);

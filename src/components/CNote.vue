@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Note } from '@/Note';
+import type { Note } from '@/model/Note';
 
 defineProps<{
   note: Note

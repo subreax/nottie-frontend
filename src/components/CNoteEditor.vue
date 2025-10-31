@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue';
 import CGrowingTextArea from '@/components/CGrowingTextArea.vue';
-import type { Note } from '../Note';
+import type { Note } from '../model/Note';
 import CTag from './CTag.vue';
 import ShareIcon from './icons/ShareIcon.vue';
 
@@ -28,17 +28,16 @@ const contentTextRef = useTemplateRef("content");
 
 function onContentChange(content: string) {
   onNoteChange({ 
-    id: props.note.id, 
-    title: props.note.title, 
+    ...props.note,
     content: content
   });
 }
 
 function onTitleChange(ev: Event) {
+  const title = (ev.target!! as HTMLInputElement).value;
   onNoteChange({
-    id: props.note.id,
-    title: (ev.target!! as HTMLInputElement).value,
-    content: props.note.content
+    ...props.note,
+    title: title
   });
 }
 

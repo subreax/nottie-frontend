@@ -3,7 +3,7 @@ import { BackendApi } from '@/Api';
 import CIconButton from '@/components/CIconButton.vue';
 import CNote from '@/components/CNote.vue';
 import CPlusIcon from '@/components/CPlusIcon.vue';
-import type { Note } from '@/Note'
+import type { Note } from '@/model/Note'
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import "masonry-layout";

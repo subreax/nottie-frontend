@@ -1,4 +1,4 @@
-import type { Note } from "./Note";
+import type { Note } from "./model/Note";
 
 export interface NoteDto {
   title: string,

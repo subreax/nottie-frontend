@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { TagIconId } from '@/model/Tag';
-import { resolveTagIcon } from './icons/TagIcons';
+import { resolveTagIcon } from '../icons/TagIcons';
 
 interface Props {
   text: string,
@@ -22,10 +22,6 @@ const {
 
 <style scoped>
 .tag {
-  padding: 8px;
-  background-color: var(--color-base10);
-  border-radius: 8px;
-
   display: inline-flex;
   gap: 4px;
   align-items: center;
