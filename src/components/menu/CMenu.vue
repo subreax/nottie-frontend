@@ -16,7 +16,8 @@ defineProps<Props>();
 defineEmits<{
   onCollapse: [],
   onNewNote: [],
-  onSearch: []
+  onSearch: [],
+  onNoteSelected: [note: Note]
 }>();
 
 </script>
@@ -46,7 +47,7 @@ defineEmits<{
     </header>
 
     <template v-for="note in notes">
-      <CMenuNoteItem :note class="note" />
+      <CMenuNoteItem :note class="note" @on-click="$emit('onNoteSelected', note)" />
       <div class="h-line"></div>
     </template>
   </div>

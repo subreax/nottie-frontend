@@ -7,3 +7,13 @@ export interface Note {
   tags: Tag[],
   lastEdit: Date
 }
+
+export function emptyNote(): Note {
+  return {
+    id: '', 
+    title: '', 
+    content: '', 
+    tags: [], 
+    lastEdit: new Date()
+  };
+}

@@ -1,29 +1,62 @@
 <script setup lang="ts">
 import CMenu from '@/components/menu/CMenu.vue';
 import CNoteEditor from '../components/CNoteEditor.vue';
-import type { Note } from '@/model/Note';
-import { BackendApi } from '@/Api';
-import { ref } from 'vue';
+import { emptyNote, type Note } from '@/model/Note';
+import { ref, watch } from 'vue';
+import { noteRepository } from '@/repository/noteRepository';
+import { useRoute, useRouter } from 'vue-router';
 
-const notes = ref<Note[]>([]);
+const router = useRouter();
+const route = useRoute();
 
-const api = new BackendApi();
+const notes = noteRepository.getNotes();
+const currentNote = ref<Note>(emptyNote());
 
-api.getNotes().then((result) => {
-  notes.value = result;
-})
+function onNoteUpdate(note: Note) {
+  currentNote.value = note;
+  noteRepository.updateNote(note);
+}
 
+function onSelectNote(note: Note) {
+  router.push(`/${note.id}`);
+}
+
+function init() {
+  const noteId = route.params.id as string;
+  if (noteId) {
+    noteRepository.getNote(noteId).then((note) => {
+      currentNote.value = note;
+    });
+  }
+  else {
+    noteRepository.generateId().then((id) => {
+      currentNote.value = { ...currentNote.value, id: id }
+      console.log(id);
+    });
+  }
+}
+
+watch(route, (r) => {
+  init()
+});
+
+init();
 </script>
 
 <template>
   <div class="container">
     <CMenu 
       class="menu"
-      :notes="notes!" />
+      :notes="notes!"
+      @on-note-selected="onSelectNote" />
   
     <CNoteEditor 
+      v-if="currentNote != null"
       class="editor"
-      :note="{ id: 'xxx', title: '', content: '', tags: [], lastEdit: new Date() }" />
+      :note="currentNote"
+      @on-update="onNoteUpdate" />
+
+    <div class="editor" v-else></div>
   </div>
 </template>
 
