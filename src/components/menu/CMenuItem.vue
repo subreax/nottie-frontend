@@ -20,7 +20,7 @@ defineEmits<{
   font: var(--font-body2);
 
   border-radius: 8px;
-  padding: 4px 8px;
+  padding: 6px 8px;
 
   transition-duration: var(--transition-s);
 }

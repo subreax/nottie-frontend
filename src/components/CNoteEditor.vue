@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue';
 import CGrowingTextArea from '@/components/CGrowingTextArea.vue';
-import type { Note } from '../model/Note';
+import type { Note } from '@/model/Note';
 import CTag from './CTag.vue';
 import ShareIcon from './icons/ShareIcon.vue';
 
@@ -59,8 +59,6 @@ function onTitleKeypress(ev: KeyboardEvent) {
         @input="onTitleChange"
         @keypress="onTitleKeypress">
 
-      <!-- <p class="last-edit">Последнее редактирование: 30 минут назад</p> -->
-
       <div class="tag-list">
         <CTag text="Favorite" />
         <CTag text="Databases" />
@@ -84,9 +82,6 @@ function onTitleKeypress(ev: KeyboardEvent) {
 <style scoped>
 .editor {
   position: relative;
-  min-height: 100dvh;
-  
-  padding: 96px;
 
   display: flex;
   flex-direction: column;

@@ -42,7 +42,7 @@ defineEmits<{
     </div>
 
     <header>
-      <p>Notes</p>
+      <h5 class="notes-title">Заметки</h5>
       <FilterIcon :size="24" />
     </header>
 
@@ -55,7 +55,7 @@ defineEmits<{
 
 <style scoped>
 .menu {
-  margin: 8px;
+  padding: 8px;
 }
 
 .item-collapse {
@@ -85,6 +85,11 @@ header {
 
 header p {
   margin: 0;
+}
+
+.notes-title {
+  margin: 0;
+  font: var(--font-h5);
 }
 
 .note {

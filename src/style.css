@@ -1,6 +1,4 @@
 :root {
-  --app-max-width: 1600px;
-
   --color-base100: #F7F7F7;
   --color-base70: #B3B3B3;
   --color-base30: #575757;
@@ -9,6 +7,8 @@
   --color-base05: #1F1F1F;
   --color-base03: #1A1A1A;
   --color-base00: #121212;
+
+  color-scheme: dark;
 
   --transition-s: 200ms;
   
@@ -22,8 +22,6 @@
 }
 
 body {
-  max-width: var(--app-max-width);
-
   color: var(--color-base100);
   background-color: var(--color-base00);
 

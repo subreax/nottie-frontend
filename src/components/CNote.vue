@@ -28,6 +28,8 @@ defineEmits<{
 .title {
   font: var(--font-h4);
   padding-bottom: 0.6rem;
+
+  overflow-wrap: break-word;
 }
 
 .content {

@@ -1,5 +1,14 @@
 import type { Note } from "@/model/Note";
 import { http } from "./http";
+import type { Tag } from "@/model/Tag";
+
+interface NoteDto {
+  id: string,
+  title: string,
+  content: string,
+  tags: Tag[],
+  lastEdit: number
+}
 
 export interface GenerateNoteIdDto {
   id: string
@@ -7,15 +16,26 @@ export interface GenerateNoteIdDto {
 
 export const notesApi = {
   async getNote(id: string): Promise<Note> {
-    return (await http.get(`/notes/${id}`)).data;
+    return (await http.get<Note>(`/notes/${id}`)).data;
   },
   async updateNote(note: Note): Promise<Note> {
-    return (await http.post(`/notes/${note.id}`, note)).data;
+    return (await http.post<Note>(`/notes/${note.id}`, note)).data;
   },
   async generateId(): Promise<GenerateNoteIdDto> {
-    return (await http.get('/notes/generate-id')).data;
+    return (await http.get<GenerateNoteIdDto>('/notes/generate-id')).data;
   },
   async getNotes(): Promise<Note[]> {
-    return (await http.get('/notes')).data;
+    return (await http.get<NoteDto[]>('/notes')).data
+      .map(dto => toModel(dto));
+  }
+}
+
+function toModel(dto: NoteDto): Note {
+  return {
+    id: dto.id,
+    title: dto.title,
+    content: dto.content,
+    tags: dto.tags,
+    lastEdit: new Date(dto.lastEdit)
   }
 }

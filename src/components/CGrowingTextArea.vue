@@ -6,32 +6,29 @@ interface Props {
   placeholder?: string
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
   (e: 'input', value: string): void
 }>();
 
-const growWrapEl = useTemplateRef("grow-wrap");
 const textAreaEl = useTemplateRef("textarea");
 
 defineExpose({
   focus: () => {
     textAreaEl.value?.focus();
   }
-})
+});
 
 function onInput(ev: InputEvent) {
-  const value = (ev.target!! as HTMLTextAreaElement).value;
-  growWrapEl.value!!.dataset.replicatedValue = value;
-
-  emit('input', value);
+  const text = (ev.target!! as HTMLTextAreaElement).value;
+  emit('input', text);
 }
 </script>
 
 <template>
-<div class="grow-wrap" ref="grow-wrap" data-replicated-value="replicated">
-  <textarea rows="1" ref="textarea" @input="onInput" :placeholder :value></textarea>
+<div class="grow-wrap" ref="grow-wrap" :data-replicated-value="props.value">
+  <textarea ref="textarea" @input="onInput" :placeholder :value></textarea>
 </div>
 </template>
 

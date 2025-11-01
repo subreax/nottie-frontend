@@ -37,7 +37,7 @@ function init() {
 }
 
 watch(route, (r) => {
-  init()
+  init();
 });
 
 init();
@@ -47,7 +47,7 @@ init();
   <div class="container">
     <CMenu 
       class="menu"
-      :notes="notes!"
+      :notes="notes"
       @on-note-selected="onSelectNote" />
   
     <CNoteEditor 
@@ -63,15 +63,23 @@ init();
 <style scoped>
 .container {
   display: flex;
+  overflow: hidden;
+  height: 100dvh;
 }
 
 .menu {
   min-width: 250px;
   max-width: 350px;
   flex: 1;
+
+  overflow-y: auto;
 }
 
 .editor {
   flex: 3;
+
+  overflow-y: auto;
+  padding: 16px;
+  padding-top: 48px;
 }
 </style>

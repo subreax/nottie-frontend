@@ -1,39 +1,49 @@
 import { notesApi } from "@/api/notesApi"
 import { Debouncer } from "@/Debouncer";
 import type { Note } from "@/model/Note"
-import { ref, type Ref } from "vue";
+import { type Ref } from "vue";
+import { NoteCache } from "./NoteCache";
 
 
-function createNoteRepository() {
-  const notes = ref<Note[]>([]);
-  const noteUpdater = new Debouncer<Note>(500, async (note) => {
-    await notesApi.updateNote(note);
-    const idx = notes.value.findIndex((note0) => note0.id === note.id);
-    if (idx > -1) {
-      notes.value[idx] = note;
-    } else {
-      notes.value.push(note);
-    }
+class NoteRepository {
+  private cache = new NoteCache();
+
+  private noteUpdater = new Debouncer<Note>(500, async (note) => {
+    const result = await notesApi.updateNote(note);
+    this.cache.updateNote(result);
   });
 
-  notesApi.getNotes().then((result) => {
-    notes.value = result
-  });
+  constructor() {
+    this.refresh();
+  }
 
-  return {
-    getNote(id: string): Promise<Note> {
-      return notesApi.getNote(id);
-    },
-    updateNote(note: Note): void {
-      noteUpdater.update(note);
-    },
-    async generateId(): Promise<string> {
-      return (await notesApi.generateId()).id;
-    },
-    getNotes(): Ref<Note[]> {
-      return notes;
+  refresh() {
+    notesApi.getNotes().then((notes) => this.cache.replaceAll(notes));
+  }
+
+  async getNote(id: string): Promise<Note> {
+    const note = this.cache.findById(id);
+    if (note) {
+      return note;
     }
+
+    const remoteNote = await notesApi.getNote(id);
+    this.cache.addNote(remoteNote);
+    return remoteNote;
+  }
+
+  updateNote(note: Note): void {
+    this.noteUpdater.update(note);
+  }
+
+  async generateId(): Promise<string> {
+    return (await notesApi.generateId()).id;
+  }
+
+  getNotes(): Ref<Note[]> {
+    return this.cache.notes;
   }
 }
 
-export const noteRepository = createNoteRepository();
+
+export const noteRepository = new NoteRepository();

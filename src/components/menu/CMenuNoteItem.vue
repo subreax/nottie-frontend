@@ -18,13 +18,13 @@ defineEmits<{
   <div class="note" @click="$emit('onClick', note)">
     <header>
       <h5>{{ note.title }}</h5>
-      <div class="tags" v-if="note.tags?.length > 0">
+      <div class="tags" v-if="note.tags.length > 0">
         <CTinyTag v-for="tag in note.tags" :key="tag.id" :text="tag.text" :icon="tag.iconId" />
       </div>
     </header>
-  
-    <p class="content">{{ note.content }}</p>
-  
+
+    <p class="content" v-if="note.content.length > 0">{{ note.content }}</p>
+
     <p class="last-edit">30 минут назад</p>
   </div>
 </template>
@@ -47,6 +47,12 @@ defineEmits<{
   cursor: pointer;
 }
 
+header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 h5 {
   font: var(--font-h5);
   margin: 0;
@@ -57,14 +63,21 @@ h5 {
 }
 
 .content {
+  height: auto;
   margin: 0;
-  max-height: calc(2em * 1.25);
+
+  text-overflow: ellipsis;
   overflow: hidden;
+  white-space-collapse: preserve-breaks;
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
 }
 
 .last-edit {
   margin: 0;
   color: var(--color-base70);
-  font: var(--font-body2);
 }
 </style>
