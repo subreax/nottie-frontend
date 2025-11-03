@@ -10,6 +10,12 @@ interface NoteDto {
   lastEdit: number
 }
 
+export interface UpdateNoteReqDto {
+  title?: string,
+  content?: string,
+  tags?: Tag[]
+}
+
 export interface GenerateNoteIdDto {
   id: string
 }
@@ -18,8 +24,9 @@ export const notesApi = {
   async getNote(id: string): Promise<Note> {
     return (await http.get<Note>(`/notes/${id}`)).data;
   },
-  async updateNote(note: Note): Promise<Note> {
-    return (await http.post<Note>(`/notes/${note.id}`, note)).data;
+  async updateNote(id: string, dto: UpdateNoteReqDto): Promise<Note> {
+    console.log(dto);
+    return (await http.post<Note>(`/notes/${id}`, dto)).data;
   },
   async generateId(): Promise<GenerateNoteIdDto> {
     return (await http.get<GenerateNoteIdDto>('/notes/generate-id')).data;

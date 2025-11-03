@@ -3,14 +3,14 @@ import { Debouncer } from "@/Debouncer";
 import type { Note } from "@/model/Note"
 import { type Ref } from "vue";
 import { NoteCache } from "./NoteCache";
+import type { Tag } from "@/model/Tag";
 
 
 class NoteRepository {
   private cache = new NoteCache();
 
-  private noteUpdater = new Debouncer<Note>(500, async (note) => {
-    const result = await notesApi.updateNote(note);
-    this.cache.updateNote(result);
+  private noteUpdater = new Debouncer<{id: string, note: Note}>(500, async (data) => {
+    await this.performUpdateNote(data.id, data.note);
   });
 
   constructor() {
@@ -32,8 +32,11 @@ class NoteRepository {
     return remoteNote;
   }
 
-  updateNote(note: Note): void {
-    this.noteUpdater.update(note);
+  async updateNote(id: string, note: Note): Promise<void> {
+    this.noteUpdater.update({
+      id: id,
+      note: note
+    });
   }
 
   async generateId(): Promise<string> {
@@ -43,7 +46,59 @@ class NoteRepository {
   getNotes(): Ref<Note[]> {
     return this.cache.notes;
   }
-}
 
+  private async performUpdateNote(id: string, note: Note) {
+    const initialNote = await this.cache.findById(id)!;
+    const changes = this.getNoteChanges(initialNote, note);
+    if (changes === null) {
+      return;
+    }
+
+    const result = await notesApi.updateNote(id, changes);
+    this.cache.updateNote(result);
+  }
+
+  private getNoteChanges(initial: Note, changed: Note): Partial<Note> | null {
+    const result: Partial<Note> = {};
+    if (initial.title !== changed.title) {
+      result.title = changed.title;
+    }
+    if (initial.content !== changed.content) {
+      result.content = changed.content;
+    }
+    if (!this.areTagArraysEqual(initial.tags, changed.tags)) {
+      result.tags = changed.tags;
+    }
+
+    if (Object.entries(result).length === 0) {
+      return null;
+    }
+
+    return result;
+  }
+  
+  private areTagArraysEqual(initial: Tag[], changed: Tag[]): boolean {
+    if (initial.length !== changed.length) {
+      return false;
+    }
+  
+    for (const tag of changed) {
+      if (initial.find((it) => this.areTagsEqual(it, tag)) === undefined) {
+        return false;
+      }
+    }
+    return true;
+  }
+  
+  private areTagsEqual(a: Tag, b: Tag): boolean {
+    const keys = Object.keys(a) as (keyof Tag)[];
+    for (const key of keys) {
+      if (a[key] !== b[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
+}
 
 export const noteRepository = new NoteRepository();

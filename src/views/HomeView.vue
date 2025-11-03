@@ -14,7 +14,7 @@ const currentNote = ref<Note>(emptyNote());
 
 function onNoteUpdate(note: Note) {
   currentNote.value = note;
-  noteRepository.updateNote(note);
+  noteRepository.updateNote(note.id, note);
 }
 
 function onSelectNote(note: Note) {
