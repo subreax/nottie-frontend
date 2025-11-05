@@ -17,6 +17,10 @@ function onNoteUpdate(note: Note) {
   noteRepository.updateNote(note.id, note);
 }
 
+async function onNewNote() {
+  router.push(`/${await noteRepository.generateId()}`);
+}
+
 function onSelectNote(note: Note) {
   router.push(`/${note.id}`);
 }
@@ -48,6 +52,7 @@ init();
     <CMenu 
       class="menu"
       :notes="notes"
+      @on-new-note="onNewNote"
       @on-note-selected="onSelectNote" />
   
     <CNoteEditor 

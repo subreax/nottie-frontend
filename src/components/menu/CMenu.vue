@@ -27,7 +27,7 @@ defineEmits<{
         text="Новая заметка" />
 
       <CMenuItem 
-        @on-click="$emit('onNewNote')" 
+        @on-click="$emit('onSearch')" 
         icon="search" 
         text="Поиск" />
     </div>

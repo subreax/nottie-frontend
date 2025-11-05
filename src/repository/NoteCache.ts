@@ -19,19 +19,41 @@ export class NoteCache {
 
   updateNote(note: Note) {
     const idx = this.findIndexById(note.id);
-    if (idx !== null) {
-      this.notes.value[idx] = note;
-    }
-    else {
-      this.notes.value.push(note);
-    }
+
+    this.changeNotes((notes) => {
+      if (idx !== null) {
+        notes[idx] = note;
+      } else {
+        notes.push(note);
+      }
+      return notes;
+    })
   }
 
   addNote(note: Note) {
-    this.notes.value.push(note);
+    const existingNoteIdx = this.findIndexById(note.id);
+
+    this.changeNotes((notes) => {
+      if (existingNoteIdx) {
+        notes[existingNoteIdx] = note;
+      } else {
+        notes.push(note);
+      }
+      return notes;
+    });
   }
 
   replaceAll(newNotes: Note[]) {
-    this.notes.value = newNotes;
+    this.notes.value = newNotes.sort(noteComparator);
   }
+
+  private changeNotes(onChange: (clonedNotes: Note[]) => Note[]) {
+    /* todo: is it required to clone note array in order to avoid unnecessary reactive updates? */
+    this.notes.value = onChange([ ...this.notes.value ])
+      .sort(noteComparator);
+  }
+}
+
+function noteComparator(a: Note, b: Note): number {
+  return b.lastEdit.getTime() - a.lastEdit.getTime();
 }

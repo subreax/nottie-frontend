@@ -26,7 +26,7 @@ export const notesApi = {
   },
   async updateNote(id: string, dto: UpdateNoteReqDto): Promise<Note> {
     console.log(dto);
-    return (await http.post<Note>(`/notes/${id}`, dto)).data;
+    return toModel((await http.post<NoteDto>(`/notes/${id}`, dto)).data);
   },
   async generateId(): Promise<GenerateNoteIdDto> {
     return (await http.get<GenerateNoteIdDto>('/notes/generate-id')).data;
