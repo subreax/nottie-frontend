@@ -1,21 +1,20 @@
 <script setup lang="ts">
-import type { TagIconId } from '@/model/Tag';
-import { resolveTagIcon } from './icons/TagIcons';
+import Icon from './icons/Icon.vue';
+import type { IconId } from './icons/IconRegister';
 
 interface Props {
   text: string,
-  icon?: TagIconId
+  icon?: IconId
 }
 
 const {
-  icon = 'default'
+  icon = 'tag'
 } = defineProps<Props>();
-
 </script>
 
 <template>
   <div class="tag">
-    <component :is="resolveTagIcon(icon)" :size=16 />
+    <Icon :icon-id="icon" :size="16" />
     <span>{{ text }}</span>
   </div>
 </template>

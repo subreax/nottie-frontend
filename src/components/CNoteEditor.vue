@@ -17,14 +17,11 @@ const emit = defineEmits<{
   onShareClicked: []
 }>();
 
+const contentTextRef = useTemplateRef("content");
 
 function onNoteChange(changedNote: Note) {
   emit('onUpdate', changedNote);
 }
-
-
-
-const contentTextRef = useTemplateRef("content");
 
 function onContentChange(content: string) {
   onNoteChange({ 
@@ -60,8 +57,7 @@ function onTitleKeypress(ev: KeyboardEvent) {
         @keypress="onTitleKeypress">
 
       <div class="tag-list">
-        <CTag text="Favorite" />
-        <CTag text="Databases" />
+        <CTag v-for="tag in note.tags" :text=tag.text />
         <CTag text="Add tag" icon="plus" />
       </div>
     

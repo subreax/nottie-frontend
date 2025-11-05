@@ -68,16 +68,15 @@ init();
 }
 
 .menu {
-  min-width: 250px;
-  max-width: 350px;
-  flex: 1;
-
+  width: 300px;
+  overflow-x: hidden;
   overflow-y: auto;
+
+  transition-duration: var(--transition-s);
 }
 
 .editor {
-  flex: 3;
-
+  flex: 1;
   overflow-y: auto;
   padding: 16px;
   padding-top: 48px;

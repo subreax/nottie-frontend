@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import type { Note } from '@/model/Note';
 import CMenuItem from './CMenuItem.vue';
-import ChevronBackwardIcon from '../icons/ChevronBackwardIcon.vue';
-import AddNoteIcon from '../icons/AddNoteIcon.vue';
-import SearchIcon from '../icons/SearchIcon.vue';
-import FilterIcon from '../icons/FilterIcon.vue';
 import CMenuNoteItem from './CMenuNoteItem.vue';
+import Icon from '../icons/Icon.vue';
 
 interface Props {
   notes: Note[]
@@ -14,7 +11,6 @@ interface Props {
 defineProps<Props>();
 
 defineEmits<{
-  onCollapse: [],
   onNewNote: [],
   onSearch: [],
   onNoteSelected: [note: Note]
@@ -25,25 +21,20 @@ defineEmits<{
 <template>
   <div class="menu">
     <div class="menu-items">
-      <CMenuItem class="item-collapse" @on-click="$emit('onCollapse')">
-        <template #icon><ChevronBackwardIcon :size="20" /></template>
-        <template #text><span>Свернуть</span></template>
-      </CMenuItem>
-  
-      <CMenuItem @on-click="$emit('onNewNote')">
-        <template #icon><AddNoteIcon :size="20" /></template>
-        <template #text><span>Новая заметка</span></template>
-      </CMenuItem>
-  
-      <CMenuItem @on-click="$emit('onSearch')">
-        <template #icon><SearchIcon :size="20" /></template>
-        <template #text><span>Поиск</span></template>
-      </CMenuItem>
+      <CMenuItem 
+        @on-click="$emit('onNewNote')" 
+        icon="add-note" 
+        text="Новая заметка" />
+
+      <CMenuItem 
+        @on-click="$emit('onNewNote')" 
+        icon="search" 
+        text="Поиск" />
     </div>
 
     <header>
       <h5 class="notes-title">Заметки</h5>
-      <FilterIcon :size="24" />
+      <Icon icon-id="filter" :size="24" />
     </header>
 
     <template v-for="note in notes">
@@ -56,11 +47,6 @@ defineEmits<{
 <style scoped>
 .menu {
   padding: 8px;
-}
-
-.item-collapse {
-  color: var(--color-base70);
-  margin-bottom: 8px;
 }
 
 .menu-items {
