@@ -4,9 +4,11 @@ import type { Note } from "@/model/Note"
 import { type Ref } from "vue";
 import { NoteCache } from "./NoteCache";
 import type { Tag } from "@/model/Tag";
+import { TaskQueue } from "@/utils/TaskQueue";
 
 
 class NoteRepository {
+  private requestQueue = new TaskQueue();
   private cache = new NoteCache();
 
   private noteUpdater = new Debouncer<{id: string, note: Note}>(500, async (data) => {
@@ -18,25 +20,35 @@ class NoteRepository {
   }
 
   refresh() {
-    notesApi.getNotes().then((notes) => this.cache.replaceAll(notes));
+    this.requestQueue.push(async () => {
+      const notes = await notesApi.getNotes();
+      this.cache.replaceAll(notes);
+    });
   }
 
-  async getNote(id: string): Promise<Note> {
-    const note = this.cache.findById(id);
-    if (note) {
-      return note;
-    }
+  getNote(id: string): Promise<Note> {
+    return this.requestQueue.push<Note>(async () => {
+      const note = this.cache.findById(id);
+      if (note) {
+        return note;
+      }
 
-    const remoteNote = await notesApi.getNote(id);
-    this.cache.addNote(remoteNote);
-    return remoteNote;
+      const remoteNote = await notesApi.getNote(id);
+      this.cache.addNote(remoteNote);
+      return remoteNote;
+    });
   }
 
-  async updateNote(id: string, note: Note): Promise<void> {
+  updateNote(id: string, note: Note) {
     this.noteUpdater.update({
       id: id,
       note: note
     });
+  }
+
+  deleteNote(note: Note): Promise<boolean> {
+    this.cache.deleteNote(note);
+    return notesApi.deleteNote(note.id);
   }
 
   async generateId(): Promise<string> {
@@ -48,14 +60,20 @@ class NoteRepository {
   }
 
   private async performUpdateNote(id: string, note: Note) {
-    const initialNote = await this.cache.findById(id)!;
-    const changes = this.getNoteChanges(initialNote, note);
-    if (changes === null) {
-      return;
+    const initialNote = await this.cache.findById(id);
+    if (initialNote === null) {
+      const result = await notesApi.updateNote(id, note);
+      this.cache.updateNote(result);
     }
-
-    const result = await notesApi.updateNote(id, changes);
-    this.cache.updateNote(result);
+    else {
+      const changes = this.getNoteChanges(initialNote, note);
+      if (changes === null) {
+        return;
+      }
+  
+      const result = await notesApi.updateNote(id, changes);
+      this.cache.updateNote(result);
+    }
   }
 
   private getNoteChanges(initial: Note, changed: Note): Partial<Note> | null {

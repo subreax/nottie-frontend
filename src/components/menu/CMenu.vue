@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import type { Note } from '@/model/Note';
 import CMenuItem from './CMenuItem.vue';
-import CMenuNoteItem from './CMenuNoteItem.vue';
+import CMenuNoteItem from './note/CMenuNoteItem.vue';
 import Icon from '../icons/Icon.vue';
 
 interface Props {
-  notes: Note[]
+  notes: Note[],
+  selectedNote: Note
 }
 
 defineProps<Props>();
 
-defineEmits<{
+const emit = defineEmits<{
   onNewNote: [],
   onSearch: [],
-  onNoteSelected: [note: Note]
+  onNoteSelected: [note: Note],
+  onDelete: [note: Note]
 }>();
 
 </script>
@@ -37,10 +39,13 @@ defineEmits<{
       <Icon icon-id="filter" :size="24" />
     </header>
 
-    <template v-for="note in notes">
-      <CMenuNoteItem :note class="note" @on-click="$emit('onNoteSelected', note)" />
-      <div class="h-line"></div>
-    </template>
+    <CMenuNoteItem 
+      v-for="note in notes"
+      :note 
+      class="note" 
+      :is-active="selectedNote.id === note.id"
+      @on-click="$emit('onNoteSelected', note)"
+      @on-delete="$emit('onDelete', note)" />
   </div>
 </template>
 

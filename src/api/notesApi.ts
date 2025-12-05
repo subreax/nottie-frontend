@@ -22,7 +22,7 @@ export interface GenerateNoteIdDto {
 
 export const notesApi = {
   async getNote(id: string): Promise<Note> {
-    return (await http.get<Note>(`/notes/${id}`)).data;
+    return toModel((await http.get<NoteDto>(`/notes/${id}`)).data);
   },
   async updateNote(id: string, dto: UpdateNoteReqDto): Promise<Note> {
     console.log(dto);
@@ -34,6 +34,10 @@ export const notesApi = {
   async getNotes(): Promise<Note[]> {
     return (await http.get<NoteDto[]>('/notes')).data
       .map(dto => toModel(dto));
+  },
+  async deleteNote(id: string): Promise<boolean> {
+    const result = await http.delete(`/notes/${id}`);
+    return result.status === 200;
   }
 }
 

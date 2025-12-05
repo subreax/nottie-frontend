@@ -26,4 +26,6 @@ body {
   background-color: var(--color-base00);
 
   font: var(--font-body);
+
+  position: relative;
 }

@@ -43,6 +43,10 @@ export class NoteCache {
     });
   }
 
+  deleteNote(note: Note) {
+    this.notes.value = this.notes.value.filter((n) => n.id !== note.id);
+  }
+
   replaceAll(newNotes: Note[]) {
     this.notes.value = newNotes.sort(noteComparator);
   }

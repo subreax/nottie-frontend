@@ -1,11 +1,11 @@
 <script setup lang="ts">
 defineEmits<{
-  click: []
+  click: [event: Event]
 }>();
 </script>
 
 <template>
-<button @click="$emit('click')">
+<button @click="(e: Event) => $emit('click', e)">
   <slot></slot>
 </button>
 </template>
@@ -25,7 +25,7 @@ button {
 }
 
 button:hover {
-  background-color: var(--color-hover);
+  background-color: var(--color-base10);
 }
 
 button:active {

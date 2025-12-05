@@ -25,6 +25,14 @@ function onSelectNote(note: Note) {
   router.push(`/${note.id}`);
 }
 
+async function onDeleteNote(note: Note) {
+  await noteRepository.deleteNote(note);
+  if (note === currentNote.value) {
+    currentNote.value = emptyNote();
+    router.replace('/');
+  }
+}
+
 function init() {
   const noteId = route.params.id as string;
   if (noteId) {
@@ -35,7 +43,6 @@ function init() {
   else {
     noteRepository.generateId().then((id) => {
       currentNote.value = { ...currentNote.value, id: id }
-      console.log(id);
     });
   }
 }
@@ -52,8 +59,10 @@ init();
     <CMenu 
       class="menu"
       :notes="notes"
+      :selected-note="currentNote"
       @on-new-note="onNewNote"
-      @on-note-selected="onSelectNote" />
+      @on-note-selected="onSelectNote"
+      @on-delete="onDeleteNote" />
   
     <CNoteEditor 
       v-if="currentNote != null"
@@ -76,6 +85,7 @@ init();
   width: 300px;
   overflow-x: hidden;
   overflow-y: auto;
+  scrollbar-gutter: stable;
 
   transition-duration: var(--transition-s);
 }
@@ -85,5 +95,6 @@ init();
   overflow-y: auto;
   padding: 16px;
   padding-top: 48px;
+  scrollbar-gutter: stable;
 }
 </style>

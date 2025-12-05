@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TagIcon from '../icons/TagIcon.vue';
+import Icon from '@/components/icons/Icon.vue';
 
 interface Props {
   text: string
@@ -10,7 +10,7 @@ defineProps<Props>();
 
 <template>
   <div class="tag">
-    <TagIcon :size=16 />
+    <Icon :icon-id="'tag'" :size=16 />
     <span>{{ text }}</span>
   </div>
 </template>

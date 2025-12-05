@@ -6,6 +6,7 @@ import PlusIcon from "./PlusIcon.vue";
 import SearchIcon from "./SearchIcon.vue";
 import ShareIcon from "./ShareIcon.vue";
 import TagIcon from "./TagIcon.vue";
+import OptionsIcon from "./OptionsIcon.vue";
 
 
 export type IconId = 
@@ -16,6 +17,7 @@ export type IconId =
   | 'search'
   | 'share'
   | 'tag'
+  | 'options'
 
 const icons2components: Record<IconId, Component> = {
   'add-note': AddNoteIcon,
@@ -24,7 +26,8 @@ const icons2components: Record<IconId, Component> = {
   'plus': PlusIcon,
   'search': SearchIcon,
   'share': ShareIcon,
-  'tag': TagIcon
+  'tag': TagIcon,
+  'options': OptionsIcon
 }
 
 export function resolveIcon(icon: IconId): Component {
